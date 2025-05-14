@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Chart } from 'react-google-charts';
+import styled from 'styled-components';
 
 interface GraficoProps {
   dados: any[];
@@ -15,43 +15,38 @@ const Grafico: React.FC<GraficoProps> = ({ dados }) => {
     );
   }
 
-  // Detecta o tipo com base nos campos retornados
   const tipo =
-    'area_queimada' in dados[0]
+    dados[0].area_queimada !== undefined
       ? 'area_queimada'
-      : 'frp' in dados[0]
+      : dados[0].frp !== undefined
       ? 'frp'
-      : 'risco_fogo' in dados[0]
+      : dados[0].risco_fogo !== undefined
       ? 'risco_fogo'
       : 'valor';
 
   const chartData = [
     ['Data', tipo.toUpperCase()],
-    ...dados.map((d) => [d.data || d.data_pas, Number(d[tipo])]),
+    ...dados.map((d) => [
+      new Date(d.data).toLocaleDateString('pt-BR'),
+      Number(d[tipo]),
+    ]),
   ];
 
-  // Título e tipo de gráfico dinâmico
+  const chartType =
+    tipo === 'area_queimada' ? 'BarChart' : tipo === 'frp' ? 'ColumnChart' : 'LineChart';
+
   const options = {
     title:
       tipo === 'area_queimada'
         ? 'Área Queimada (ha)'
         : tipo === 'frp'
         ? 'Potência Radiativa do Fogo (FRP MW)'
-        : tipo === 'risco_fogo'
-        ? 'Índice de Risco de Fogo'
-        : 'Valor',
+        : 'Índice de Risco de Fogo',
     legend: { position: 'bottom' },
     backgroundColor: 'transparent',
     hAxis: { title: 'Data' },
     vAxis: { title: 'Valor' },
   };
-
-  const chartType =
-    tipo === 'area_queimada'
-      ? 'BarChart'
-      : tipo === 'frp'
-      ? 'ColumnChart'
-      : 'LineChart';
 
   return (
     <GraficoContainer>

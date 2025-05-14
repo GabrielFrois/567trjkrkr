@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-
 interface FiltroGraficoProps {
   onFiltrar: (filtros: { tipo: string; escopo: string; dataInicio: string; dataFim: string }) => void;
 }
 
 const FiltroGrafico: React.FC<FiltroGraficoProps> = ({ onFiltrar }) => {
-  const [index1, setIndex1] = useState(0);
-  const [index2, setIndex2] = useState(0);
+  const [indexTipo, setIndexTipo] = useState(0);
+  const [indexEscopo, setIndexEscopo] = useState(0);
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
 
@@ -17,8 +16,8 @@ const FiltroGrafico: React.FC<FiltroGraficoProps> = ({ onFiltrar }) => {
 
   const aplicarFiltro = () => {
     onFiltrar({
-      tipo: tipos[index1],
-      escopo: escopos[index2],
+      tipo: tipos[indexTipo],
+      escopo: escopos[indexEscopo],
       dataInicio,
       dataFim,
     });
@@ -28,14 +27,14 @@ const FiltroGrafico: React.FC<FiltroGraficoProps> = ({ onFiltrar }) => {
     <FiltroContainer>
       <Filtros>
         <ToggleLabels1>
-          <span>Focos</span>
+          <span>Foco Calor</span>
           <span>Área Queimada</span>
           <span>Risco Fogo</span>
         </ToggleLabels1>
 
-        <SliderContainer onClick={() => setIndex1((index1 + 1) % tipos.length)}>
-          <Slider1 style={{ backgroundColor: ['#FF5722', '#795548', '#FF9800'][index1] }}>
-            <SliderThumb1 style={{ transform: `translateX(${index1 * 122}px)` }} />
+        <SliderContainer onClick={() => setIndexTipo((indexTipo + 1) % tipos.length)}>
+          <Slider1 style={{ backgroundColor: ['#FF5722', '#795548', '#FF9800'][indexTipo] }}>
+            <SliderThumb1 style={{ transform: `translateX(${indexTipo * 122}px)` }} />
           </Slider1>
         </SliderContainer>
 
@@ -44,9 +43,9 @@ const FiltroGrafico: React.FC<FiltroGraficoProps> = ({ onFiltrar }) => {
           <span>Biomas</span>
         </ToggleLabels2>
 
-        <SliderContainer onClick={() => setIndex2((index2 + 1) % escopos.length)}>
-          <Slider2 style={{ backgroundColor: ['#1976D2', '#388E3C'][index2] }}>
-            <SliderThumb2 style={{ transform: `translateX(${index2 * 75}px)` }} />
+        <SliderContainer onClick={() => setIndexEscopo((indexEscopo + 1) % escopos.length)}>
+          <Slider2 style={{ backgroundColor: ['#1976D2', '#388E3C'][indexEscopo] }}>
+            <SliderThumb2 style={{ transform: `translateX(${indexEscopo * 75}px)` }} />
           </Slider2>
         </SliderContainer>
 
@@ -71,6 +70,7 @@ const FiltroGrafico: React.FC<FiltroGraficoProps> = ({ onFiltrar }) => {
 };
 
 export default FiltroGrafico;
+
 
 const FiltroContainer = styled.div`
   font-weight: bold;
